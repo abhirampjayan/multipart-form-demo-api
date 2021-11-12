@@ -8,7 +8,7 @@ router.route("/").post(FormController.formMulti);
 router
   .route("/upload")
   .post(upload.single("document"), function (req, res, next) {
-    console.log(req.headers);
+    console.log(req.file);
     const header = req.headers;
     if (!header.authorization) {
       res.status(404).json({
@@ -17,7 +17,7 @@ router
           message: "authorization is required",
         },
       });
-    }else if(!req.file){
+    } else if (!req.file) {
       res.status(404).json({
         error: {
           statusCode: 404,
@@ -25,7 +25,11 @@ router
         },
       });
     } else {
-      res.json({ data: "hello" });
+      res.json({
+        document: {
+          id: req.file.filename,
+        },
+      });
     }
   });
 
